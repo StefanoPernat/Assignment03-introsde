@@ -14,5 +14,16 @@ firstname	TEXT NOT NULL,
 lastname	TEXT NOT NULL,
 UNIQUE(firstname, lastname)
 );
+
+CREATE TABLE Measure (
+	idMeasure		INTEGER PRIMARY KEY AUTOINCREMENT,
+	dateRegistered	DATE NOT NULL,
+	measureType		TEXT NOT NULL,
+	measureValue	TEXT NOT NULL,
+	valueType		TEXT NOT NULL,
+	isCurrent		INTEGER NOT NULL DEFAULT '1',
+	idPerson		INTEGER NOT NULL,
+	FOREIGN KEY(`idPerson`) REFERENCES Person(idPerson)
+);
 ```
 
