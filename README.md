@@ -8,13 +8,11 @@ Measure (idMeasure, dateRegistered, measureType, measureValue, valueType, isCurr
 
 SQL Instructions:
 ```sql
-`CREATE TABLE Person (
+CREATE TABLE Person (
 idPerson	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 firstname	TEXT NOT NULL,
 lastname	TEXT NOT NULL,
 UNIQUE(firstname, lastname)
 );
-
 ```
-`
 
