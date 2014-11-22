@@ -27,3 +27,12 @@ CREATE TABLE Measure (
 );
 ```
 
+Added the following tuples to **Person**:
+
+|idPerson|firstname|lastname|
+|--------|---------|--------|
+|    1   | Stefano | Pernat |
+|--------|---------|--------|
+|    2   |  Pinco  | Pallino|
+|--------|---------|--------|
+
