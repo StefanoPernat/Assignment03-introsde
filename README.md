@@ -3,7 +3,7 @@
 ### Phase 1: **The database**
 My project is based on a **sqlite** database as follows:
 
-Person (idPerson, firstname, lastname)
+Person (idPerson, firstname, lastname)  
 Measure (idMeasure, dateRegistered, measureType, measureValue, valueType, isCurrent, idPerson)
 
 SQL Instructions:
