@@ -75,7 +75,24 @@ Added the following tuples to **Measure**:
 
 
 
-## Phase II: The Model
+## Phase II: **The Model**
 
 
+```java
+public class Person implements Serializable {
+	private Long idPerson;
+	private String firstname;
+	private String lastname;
+	private List<Measure> currentHealth;
+	private List<Measure> healthHistory;
+}
 
+public class Measure implements Serializable {
+	private Long idMeasure;
+	private Date dateRegistered;
+	private String measureType;
+	private String measureValue;
+	private String valueType;
+	private int isCurrent; // 1 current Health, 0 History value
+}
+```
