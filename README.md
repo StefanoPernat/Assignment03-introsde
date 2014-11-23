@@ -1,6 +1,6 @@
 ## Introsde Assigment 3: SOAP Life Coach
 
-### Phase 1: **The database**
+### Phase I: **The database**
 My project is based on a **sqlite** database as follows:
 
 Person (idPerson, firstname, lastname)  
@@ -23,7 +23,7 @@ CREATE TABLE Measure (
 	valueType		TEXT NOT NULL,
 	isCurrent		INTEGER NOT NULL DEFAULT '1',
 	idPerson		INTEGER NOT NULL,
-	FOREIGN KEY(`idPerson`) REFERENCES Person(idPerson)
+	FOREIGN KEY(idPerson) REFERENCES Person(idPerson)
 );
 ```
 
@@ -74,6 +74,8 @@ Added the following tuples to **Measure**:
 |   32    |  2012-09-05  |   steps   |    17000   | Integer |    0    |    4   |
 
 
+
+## Phase II: The Model
 
 
 
