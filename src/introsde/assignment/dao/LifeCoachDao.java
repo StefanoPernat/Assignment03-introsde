@@ -37,14 +37,19 @@ public enum LifeCoachDao {
 	
 	public List<Measure> getCurrentHealthMeasures(int personId){
 		//ArrayList<Measure> result = new ArrayList<Measure>();
-		return getEntityManager().createNamedQuery("Measure.getCurrentHealth", Measure.class)
-						  		 .setParameter("id", personId).getResultList();
+		List<Measure> result = getEntityManager().createNamedQuery("Measure.getCurrentHealth", Measure.class)
+		  		 								 .setParameter("id", personId).getResultList(); 
+		destroyEntityManager();
+		return result;
+		
 	}
 	
 	public List<Measure> getHistoryHealthMeasures(int personId){
 		//ArrayList<Measure> result = new ArrayList<Measure>();
-		return getEntityManager().createNamedQuery("Measure.getHistoryHealth", Measure.class)
-						  		 .setParameter("id", personId).getResultList();
+		List<Measure> result = getEntityManager().createNamedQuery("Measure.getHistoryHealth", Measure.class)
+						  		 				 .setParameter("id", personId).getResultList();
+		destroyEntityManager();
+		return result;
 	}
 	
 }

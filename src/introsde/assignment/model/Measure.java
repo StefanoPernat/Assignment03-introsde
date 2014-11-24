@@ -13,8 +13,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -24,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 	@NamedQuery(name="Measure.getCurrentHealth", query="SELECT m FROM Measure m WHERE m.person.idPerson=:id AND m.isCurrent=1"),
 	@NamedQuery(name="Measure.getHistoryHealth", query="SELECT m FROM Measure m WHERE m.person.idPerson=:id AND m.isCurrent=0")
 })
-@XmlRootElement
+@XmlRootElement(name="measure")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Measure implements Serializable {
 	
@@ -32,11 +35,13 @@ public class Measure implements Serializable {
 
 	@Id
 	@GeneratedValue(generator="sqlite_measure")
-	@TableGenerator(name="sqlite_measure", table="\"sqlite_sequence\"", pkColumnName="\"name\"", valueColumnName="\"seq\"", pkColumnValue="Measure")
+	@TableGenerator(name="sqlite_measure", table="\"sqlite_sequence\"", pkColumnName="name", valueColumnName="seq", pkColumnValue="Measure")
 	@Column(name="\"idMeasure\"")
+	@XmlElement(name="mid")
 	private Long idMeasure;
 	
 	@Column(name="\"dateRegistered\"")
+	@Temporal(TemporalType.DATE)
 	private Date dateRegistered;
 	
 	@Column(name="\"measureType\"")
@@ -46,9 +51,11 @@ public class Measure implements Serializable {
 	private String measureValue;
 	
 	@Column(name="\"valueType\"")
+	@XmlElement(name="measureValueType")
 	private String valueType;
 	
 	@Column(name="\"isCurrent\"")
+	@XmlTransient
 	private int isCurrent; // 1 current Health, 0 History value
 	
 	@ManyToOne

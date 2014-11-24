@@ -8,7 +8,7 @@
 			<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
 			
 			<!-- database url -->
-			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:LifeStatus.sqlite"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:LifeCoach.sqlite"/>
 			
 			<!-- see ALL log information -->
 			<property name="eclipselink.logging.level" value="INFO" />

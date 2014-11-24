@@ -12,6 +12,7 @@ CREATE TABLE Person (
 idPerson	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 firstname	TEXT NOT NULL,
 lastname	TEXT NOT NULL,
+birthdate	DATE NOT NULL,
 UNIQUE(firstname, lastname)
 );
 
@@ -29,12 +30,12 @@ CREATE TABLE Measure (
 
 Added the following tuples to **Person**:
 
-|idPerson|firstname|lastname|
-|--------|---------|--------|
-|    1   | Stefano | Pernat |
-|    2   |  Pinco  | Pallino|
-|    3   |  Marco  |Pedrazzi|
-|    4   |   Luka  | Modric |
+|idPerson|firstname|lastname|birthdate |
+|--------|---------|--------|----------|
+|    1   | Stefano | Pernat |1989-02-07|
+|    2   |  Pinco  | Pallino|1982-11-10|
+|    3   |  Marco  |Pedrazzi|1989-12-13|
+|    4   |   Luka  | Modric |1985-09-09|
 
 Added the following tuples to **Measure**:
 
@@ -83,6 +84,7 @@ public class Person implements Serializable {
 	private Long idPerson;
 	private String firstname;
 	private String lastname;
+	private Date birthdate;
 	private List<Measure> currentHealth;
 	private List<Measure> healthHistory;
 }
@@ -95,4 +97,20 @@ public class Measure implements Serializable {
 	private String valueType;
 	private int isCurrent; // 1 current Health, 0 History value
 }
+```
+
+## Phase 3: The Request
+
+**REQUEST 1:** readPersonList(): return all people saved into the database (personal info + healthprofile)
+
+POST request for 1 is the following:
+
+```xml
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://soap.assignment.introsde/">
+    <m:getPeopleList />
+</soap:Body>
+</soap:Envelope>
 ```

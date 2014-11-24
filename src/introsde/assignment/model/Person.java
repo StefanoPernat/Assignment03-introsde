@@ -3,6 +3,7 @@ package introsde.assignment.model;
 import introsde.assignment.dao.LifeCoachDao;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,27 +12,35 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
 @Entity
 @Table(name="\"Person\"")
-@XmlRootElement
+@NamedQueries({
+	@NamedQuery(name="Person.getAll", query="SELECT p FROM Person p")
+})
+@XmlRootElement(name="person")
 @XmlAccessorType(XmlAccessType.NONE)
 public class Person implements Serializable {
 	private static final long serialVersionUID = 1573094360811963821L;
 
 	@Id
 	@GeneratedValue(generator="sqlite_person")
-	@TableGenerator(name="sqlite_person", table="\"sqlite_sequence\"", pkColumnName="\"name\"", valueColumnName="\"seq\"", pkColumnValue="Person")
+	@TableGenerator(name="sqlite_person", table="\"sqlite_sequence\"", pkColumnName="name", valueColumnName="seq", pkColumnValue="Person")
 	@Column(name="\"idPerson\"")
-	@XmlElement
+	@XmlElement(name="personId")
 	private Long idPerson;
 	
 	@Column(name="\"firstname\"")
@@ -41,6 +50,11 @@ public class Person implements Serializable {
 	@Column(name="\"lastname\"")
 	@XmlElement
 	private String lastname;
+	
+	@Column(name="\"birthdate\"")
+	@XmlElement
+	@Temporal(TemporalType.DATE)
+	private Date birthdate;
 	
 	
 	@OneToMany(mappedBy="person", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
@@ -63,6 +77,8 @@ public class Person implements Serializable {
 		return lastname;
 	}
 
+	@XmlElementWrapper(name="currentHealth")
+	@XmlElement(name="measure")
 	public List<Measure> getCurrentHealth() {
 		this.currentHealth.clear();
 		this.currentHealth.addAll(LifeCoachDao.instance.getCurrentHealthMeasures(this.idPerson.intValue()));
@@ -97,8 +113,25 @@ public class Person implements Serializable {
 		this.healthHistory = healthHistory;
 	}
 
+	public static List<Person> getAll(){
+		List<Person> res = null;
+		try{
+				res = LifeCoachDao.instance.getEntityManager().createNamedQuery("Person.getAll", Person.class)
+															 .getResultList();
+				LifeCoachDao.instance.destroyEntityManager();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+		for(Person p: res){
+			System.out.println(p.toString());
+		}
+		
+		return res;
+	}
 	
-	
-	
+	public String toString(){
+		return "Person("+idPerson+","+firstname+","+lastname+","+birthdate+")";
+	}
 	
 }
