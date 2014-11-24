@@ -23,4 +23,8 @@ public interface People {
 	@WebMethod(operationName="readPerson")
 	@WebResult(name="person")
 	public Person getPerson(@WebParam(name="personId") Long id);
+	
+	@WebMethod(operationName="updatePerson")
+	@WebResult(name="personId")
+	public Long updatePerson(@WebParam(name="person") Person target);
 }

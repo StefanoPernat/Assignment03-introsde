@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityTransaction;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -30,7 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name="\"Person\"")
 @NamedQueries({
 	@NamedQuery(name="Person.getAll", query="SELECT p FROM Person p"),
-	@NamedQuery(name="Person.getOne", query="SELECT p FROM Person p WHERE p.idPerson=:id")
+	@NamedQuery(name="Person.getOne", query="SELECT p FROM Person p WHERE p.idPerson=:id"),
+	@NamedQuery(name="Person.getIdFromFullName", 
+				query="SELECT p.idPerson FROM Person p WHERE p.firstname=:fname AND p.lastname=:lname")
 })
 @XmlRootElement(name="person")
 @XmlAccessorType(XmlAccessType.NONE)
@@ -105,6 +108,16 @@ public class Person implements Serializable {
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
+	
+	
+
+	public Date getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
+	}
 
 	public void setCurrentHealth(List<Measure> currentHealth) {
 		this.currentHealth = currentHealth;
@@ -136,12 +149,40 @@ public class Person implements Serializable {
 		try{
 			res = LifeCoachDao.instance.getEntityManager().createNamedQuery("Person.getOne", Person.class)
 														  .setParameter("id", id.intValue()).getSingleResult();
+			LifeCoachDao.instance.destroyEntityManager();
 		}catch(Exception ex){
 			System.out.println(ex.getMessage());
 			res = null;
 		}
 		
 		return res;
+	}
+	
+	public static Long updatePerson(Person target)
+	{
+		Long id = null;
+		
+		try{
+			id = LifeCoachDao.instance.getEntityManager().createNamedQuery("Person.getIdFromFullName", Long.class)
+														 .setParameter("fname", target.getFirstname())
+														 .setParameter("lname", target.getLastname()).getSingleResult();
+			Person updated = new Person();
+			updated.setIdPerson(id);
+			updated.setFirstname(target.getFirstname());
+			updated.setLastname(target.getLastname());
+			updated.setBirthdate(target.getBirthdate());
+			
+			EntityTransaction tx = LifeCoachDao.instance.getEntityManager().getTransaction();
+			tx.begin();
+			updated = LifeCoachDao.instance.getEntityManager().merge(updated);
+			tx.commit();
+			LifeCoachDao.instance.destroyEntityManager();
+		}catch(Exception ex){
+			ex.printStackTrace();
+			id = new Long(-1);
+		}
+		
+		return id;
 	}
 	
 	public String toString(){

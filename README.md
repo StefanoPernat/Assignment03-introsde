@@ -130,3 +130,23 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
 </soap:Body>
 </soap:Envelope>
 ```
+
+**REQUEST 3:** updatePerson(Person p): update the personal info of the Person Passed as input
+
+POST request is the following
+
+```xml
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://soap.assignment.introsde/">
+    <m:updatePerson>
+      <person>
+        <firstname>Pinco</firstname>
+        <lastname>Pallino</lastname>
+        <birthdate>1979-01-01</birthdate>
+      </person>
+    </m:updatePerson>
+</soap:Body>
+</soap:Envelope>
+```

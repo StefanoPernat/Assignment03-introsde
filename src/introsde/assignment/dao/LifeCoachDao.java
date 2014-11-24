@@ -2,6 +2,7 @@ package introsde.assignment.dao;
 
 import introsde.assignment.model.Measure;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -36,20 +37,22 @@ public enum LifeCoachDao {
 	}
 	
 	public List<Measure> getCurrentHealthMeasures(int personId){
-		//ArrayList<Measure> result = new ArrayList<Measure>();
+		ArrayList<Measure> res = new ArrayList<Measure>();
 		List<Measure> result = getEntityManager().createNamedQuery("Measure.getCurrentHealth", Measure.class)
 		  		 								 .setParameter("id", personId).getResultList(); 
+		res.addAll(result);
 		destroyEntityManager();
-		return result;
+		return res;
 		
 	}
 	
 	public List<Measure> getHistoryHealthMeasures(int personId){
-		//ArrayList<Measure> result = new ArrayList<Measure>();
+		ArrayList<Measure> res = new ArrayList<Measure>();
 		List<Measure> result = getEntityManager().createNamedQuery("Measure.getHistoryHealth", Measure.class)
 						  		 				 .setParameter("id", personId).getResultList();
+		res.addAll(result);
 		destroyEntityManager();
-		return result;
+		return res;
 	}
 	
 }

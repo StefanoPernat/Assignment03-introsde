@@ -36,4 +36,12 @@ public class PeopleImpl implements People {
 		else System.out.println("--> "+target.toString());
 		return target;
 	}
+
+	@Override
+	public Long updatePerson(Person target) {
+		// TODO Auto-generated method stub
+		System.out.println("--> REQUESTED: updatePerson(p)");
+		System.out.println("--> "+target.toString());
+		return Person.updatePerson(target);
+	}
 }
