@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-@WebService(endpointInterface="introsde.assignment.soap.People")
+@WebService(endpointInterface="introsde.assignment.soap.People", serviceName="PeopleImplService")
 public class PeopleImpl implements People {
 
 	@Override
@@ -25,5 +25,15 @@ public class PeopleImpl implements People {
 			System.out.println("--> No People Found");
 		}
 		return peopleWrapper;
+	}
+
+	@Override
+	public Person getPerson(Long id) {
+		System.out.println("--> REQUESTED: getPerson("+id+")");
+		Person target = Person.getOne(id);
+		if(target == null)
+			System.out.println("--> No Person found with id: "+id);
+		else System.out.println("--> "+target.toString());
+		return target;
 	}
 }

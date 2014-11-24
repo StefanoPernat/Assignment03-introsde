@@ -103,14 +103,30 @@ public class Measure implements Serializable {
 
 **REQUEST 1:** readPersonList(): return all people saved into the database (personal info + healthprofile)
 
-POST request for 1 is the following:
+POST request is the following:
 
 ```xml
 <soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
   <soap:Body xmlns:m="http://soap.assignment.introsde/">
-    <m:getPeopleList />
+    <m:readPeopleList />
+</soap:Body>
+</soap:Envelope>
+```
+
+**REQUEST 2:** readPerson(Long id): return the Person (personal info + healthprofile) of the Person identified by id
+
+POST request is the following
+
+```xml
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://soap.assignment.introsde/">
+    <m:readPerson>
+      <personId>2</personId>
+    </m:readPerson>
 </soap:Body>
 </soap:Envelope>
 ```

@@ -29,7 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name="\"Person\"")
 @NamedQueries({
-	@NamedQuery(name="Person.getAll", query="SELECT p FROM Person p")
+	@NamedQuery(name="Person.getAll", query="SELECT p FROM Person p"),
+	@NamedQuery(name="Person.getOne", query="SELECT p FROM Person p WHERE p.idPerson=:id")
 })
 @XmlRootElement(name="person")
 @XmlAccessorType(XmlAccessType.NONE)
@@ -125,6 +126,19 @@ public class Person implements Serializable {
 		
 		for(Person p: res){
 			System.out.println(p.toString());
+		}
+		
+		return res;
+	}
+	
+	public static Person getOne(Long id){
+		Person res = null;
+		try{
+			res = LifeCoachDao.instance.getEntityManager().createNamedQuery("Person.getOne", Person.class)
+														  .setParameter("id", id.intValue()).getSingleResult();
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+			res = null;
 		}
 		
 		return res;
