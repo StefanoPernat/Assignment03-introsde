@@ -3,6 +3,7 @@
 	<persistence-unit name="jpa-assignment03">
 		<class>introsde.assignment.model.Person</class>
 		<class>introsde.assignment.model.Measure</class>
+		<class>introsde.assignment.converter.DateConverter</class>
 		<properties>
 			<!-- the JDBC driver for connecting to DB -->
 			<property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>

@@ -1,5 +1,7 @@
 package introsde.assignment.model;
 
+import introsde.assignment.adapter.DateAdapter;
+import introsde.assignment.converter.DateConverter;
 import introsde.assignment.dao.LifeCoachDao;
 
 import java.io.Serializable;
@@ -8,6 +10,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EntityTransaction;
 import javax.persistence.FetchType;
@@ -18,14 +21,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @Entity
 @Table(name="\"Person\"")
@@ -57,7 +58,8 @@ public class Person implements Serializable {
 	
 	@Column(name="\"birthdate\"")
 	@XmlElement
-	@Temporal(TemporalType.DATE)
+	@Convert(converter=DateConverter.class)
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date birthdate;
 	
 	

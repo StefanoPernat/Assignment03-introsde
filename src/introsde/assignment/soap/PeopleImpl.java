@@ -3,9 +3,6 @@ package introsde.assignment.soap;
 import introsde.assignment.model.Person;
 import introsde.assignment.wrapper.PeopleListWrapper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.jws.WebService;
 
 @WebService(endpointInterface="introsde.assignment.soap.People", serviceName="PeopleImplService")

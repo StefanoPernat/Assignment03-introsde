@@ -3,8 +3,6 @@ package introsde.assignment.soap;
 import introsde.assignment.model.Person;
 import introsde.assignment.wrapper.PeopleListWrapper;
 
-import java.util.List;
-
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
