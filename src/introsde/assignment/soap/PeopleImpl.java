@@ -1,5 +1,6 @@
 package introsde.assignment.soap;
 
+import introsde.assignment.model.Measure;
 import introsde.assignment.model.Person;
 import introsde.assignment.wrapper.PeopleListWrapper;
 
@@ -30,15 +31,29 @@ public class PeopleImpl implements People {
 		Person target = Person.getOne(id);
 		if(target == null)
 			System.out.println("--> No Person found with id: "+id);
-		else System.out.println("--> "+target.toString());
+		else {
+			System.out.println("--> "+target.toString());
+			for(Measure m: target.getCurrentHealth())
+				System.out.println(m.toString());
+		}
 		return target;
 	}
 
 	@Override
 	public Long updatePerson(Person target) {
-		// TODO Auto-generated method stub
 		System.out.println("--> REQUESTED: updatePerson(p)");
 		System.out.println("--> "+target.toString());
 		return Person.updatePerson(target);
+	}
+
+	@Override
+	public Long createPerson(Person target) {
+		System.out.println("--> REQUESTED: createPerson("+target.toString()+")");
+		System.out.println("--> "+target.toString());
+		System.out.println(target.hasCurrentHealth());
+		/*for(Measure m: target.currentHealth){
+			System.out.println("\t--> "+m.toString());
+		}*/
+		return Person.createPerson(target);
 	}
 }

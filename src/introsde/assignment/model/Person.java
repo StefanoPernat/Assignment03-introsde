@@ -5,6 +5,7 @@ import introsde.assignment.converter.DateConverter;
 import introsde.assignment.dao.LifeCoachDao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 	@NamedQuery(name="Person.getAll", query="SELECT p FROM Person p"),
 	@NamedQuery(name="Person.getOne", query="SELECT p FROM Person p WHERE p.idPerson=:id"),
 	@NamedQuery(name="Person.getIdFromFullName", 
-				query="SELECT p.idPerson FROM Person p WHERE p.firstname=:fname AND p.lastname=:lname")
+				query="SELECT p.idPerson FROM Person p WHERE p.firstname=:fname AND p.lastname=:lname"),
+	@NamedQuery(name="Person.maxId", query="SELECT max(p.idPerson) FROM Person p")
 })
 @XmlRootElement(name="person")
 @XmlAccessorType(XmlAccessType.NONE)
@@ -64,7 +66,7 @@ public class Person implements Serializable {
 	
 	
 	@OneToMany(mappedBy="person", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private List<Measure> currentHealth;
+	public List<Measure> currentHealth;
 	
 	@OneToMany(mappedBy="person", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<Measure> healthHistory;
@@ -82,13 +84,22 @@ public class Person implements Serializable {
 	public String getLastname() {
 		return lastname;
 	}
-
+	
 	@XmlElementWrapper(name="currentHealth")
 	@XmlElement(name="measure")
 	public List<Measure> getCurrentHealth() {
+		ArrayList<Measure> currentValueInCurrentHealth = new ArrayList<Measure>();
+		currentValueInCurrentHealth.addAll(this.currentHealth);
 		this.currentHealth.clear();
-		this.currentHealth.addAll(LifeCoachDao.instance.getCurrentHealthMeasures(this.idPerson.intValue()));
+		for(Measure m: currentValueInCurrentHealth){
+			if(m.IsCurrent() == 1){
+				this.currentHealth.add(m);
+			}
+		}
 		return this.currentHealth;
+		/*this.currentHealth.clear();
+		this.currentHealth.addAll(LifeCoachDao.instance.getCurrentHealthMeasures(this.idPerson.intValue()));
+		return this.currentHealth;*/
 	}
 
 	public List<Measure> getHealthHistory() {
@@ -201,6 +212,34 @@ public class Person implements Serializable {
 			ex.printStackTrace();
 			return new Long(-1);
 		}
+	}
+	
+	private static Long getMaxId(){
+		Long maxid = null;
+		
+		try{
+			maxid = LifeCoachDao.instance.getEntityManager().createNamedQuery("Person.maxId",Long.class).getSingleResult();
+			LifeCoachDao.instance.destroyEntityManager();
+			return maxid;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			return new Long(-1);
+		}
+	}
+	
+	public static Long createPerson(Person p){
+		EntityTransaction tx = LifeCoachDao.instance.getEntityManager().getTransaction();
+		tx.begin();
+		LifeCoachDao.instance.getEntityManager().persist(p);
+		tx.commit();
+		LifeCoachDao.instance.destroyEntityManager();
+		
+		return Person.getMaxId();
+	}
+	
+	public boolean hasCurrentHealth()
+	{
+		return this.currentHealth == null;
 	}
 	
 	public String toString(){

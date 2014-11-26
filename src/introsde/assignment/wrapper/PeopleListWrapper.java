@@ -1,5 +1,6 @@
 package introsde.assignment.wrapper;
 
+import introsde.assignment.model.Measure;
 import introsde.assignment.model.Person;
 
 import java.util.ArrayList;
@@ -17,6 +18,15 @@ public class PeopleListWrapper {
 		
 		this.peopleList = new ArrayList<Person>();
 		this.peopleList.addAll(peopleList);
+		
+		/*System.out.println("================wrapper=====================");
+		for(Person p: peopleList){
+			System.out.println("---> "+p.toString());
+			for(Measure m: p.getCurrentHealth()){
+				System.out.println("\t--> "+m.toString());
+			}
+		}
+		System.out.println("================wrapper=====================");*/
 	}
 	
 	public ArrayList<Person> getPeopleList()

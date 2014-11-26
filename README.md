@@ -216,3 +216,33 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
 	</currentHealth>
 </person>
 ```
+
+**REQUEST 4**: createPerson(Person p): create a new person (only personal info, no currentHealth)
+
+POST request is the following:
+```xml
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://soap.assignment.introsde/">
+    <m:createPerson>
+      <person>
+        <personId>0</personId>
+        <firstname>Test</firstname>
+        <lastname>Creation</lastname>
+        <birthdate>1914-01-01</birthdate>
+      </person>
+    </m:createPerson>
+</soap:Body>
+</soap:Envelope>
+```
+The created Person is:
+```xml
+<person>
+	<personId>5</personId>
+	<firstname>Test</firstname>
+	<lastname>Creation</lastname>
+	<birthdate>1914-01-01</birthdate>
+	<currentHealth />
+</person>
+```

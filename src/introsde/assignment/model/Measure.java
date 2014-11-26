@@ -66,5 +66,65 @@ public class Measure implements Serializable {
 	@JoinColumn(name="\"idPerson\"", referencedColumnName="\"idPerson\"")
 	@XmlTransient
 	private Person person;
+
+	public Long getIdMeasure() {
+		return idMeasure;
+	}
+
+	public Date getDateRegistered() {
+		return dateRegistered;
+	}
+
+	public String getMeasureType() {
+		return measureType;
+	}
+
+	public String getMeasureValue() {
+		return measureValue;
+	}
+
+	public String getValueType() {
+		return valueType;
+	}
+
+	public int IsCurrent() {
+		return isCurrent;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setIdMeasure(Long idMeasure) {
+		this.idMeasure = idMeasure;
+	}
+
+	public void setDateRegistered(Date dateRegistered) {
+		this.dateRegistered = dateRegistered;
+	}
+
+	public void setMeasureType(String measureType) {
+		this.measureType = measureType;
+	}
+
+	public void setMeasureValue(String measureValue) {
+		this.measureValue = measureValue;
+	}
+
+	public void setValueType(String valueType) {
+		this.valueType = valueType;
+	}
+
+	public void setCurrent(int isCurrent) {
+		this.isCurrent = isCurrent;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+	
+	public String toString(){
+		return "Measure("+idMeasure+","+dateRegistered+","+measureType+","+measureValue+","+valueType+","+isCurrent+")";
+	}
 	
 }
