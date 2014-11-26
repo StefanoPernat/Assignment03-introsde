@@ -1,9 +1,13 @@
 package introsde.assignment.model;
 
+import introsde.assignment.adapter.DateAdapter;
+import introsde.assignment.converter.DateConverter;
+
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,13 +17,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @Entity
 @Table(name="\"Measure\"")
@@ -41,7 +44,8 @@ public class Measure implements Serializable {
 	private Long idMeasure;
 	
 	@Column(name="\"dateRegistered\"")
-	@Temporal(TemporalType.DATE)
+	@Convert(converter=DateConverter.class)
+	@XmlJavaTypeAdapter(DateAdapter.class)
 	private Date dateRegistered;
 	
 	@Column(name="\"measureType\"")

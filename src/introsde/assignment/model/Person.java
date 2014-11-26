@@ -150,7 +150,7 @@ public class Person implements Serializable {
 		Person res = null;
 		try{
 			res = LifeCoachDao.instance.getEntityManager().createNamedQuery("Person.getOne", Person.class)
-														  .setParameter("id", id.intValue()).getSingleResult();
+														  .setParameter("id", id.longValue()).getSingleResult();
 			LifeCoachDao.instance.destroyEntityManager();
 		}catch(Exception ex){
 			System.out.println(ex.getMessage());
@@ -162,13 +162,31 @@ public class Person implements Serializable {
 	
 	public static Long updatePerson(Person target)
 	{
-		Long id = null;
+		Person fromDB = null;
 		
 		try{
-			id = LifeCoachDao.instance.getEntityManager().createNamedQuery("Person.getIdFromFullName", Long.class)
-														 .setParameter("fname", target.getFirstname())
-														 .setParameter("lname", target.getLastname()).getSingleResult();
-			Person updated = new Person();
+			fromDB = LifeCoachDao.instance.getEntityManager().createNamedQuery("Person.getOne", Person.class)
+					  										 .setParameter("id", target.getIdPerson().longValue()).getSingleResult();
+			if(fromDB != null){
+				Person updated = new Person();
+				updated.setIdPerson(target.getIdPerson());
+				updated.setFirstname(target.getFirstname());
+				updated.setLastname(target.getLastname());
+				updated.setBirthdate(target.getBirthdate());
+				
+				EntityTransaction tx = LifeCoachDao.instance.getEntityManager().getTransaction();
+				tx.begin();
+				updated = LifeCoachDao.instance.getEntityManager().merge(updated);
+				tx.commit();
+				LifeCoachDao.instance.destroyEntityManager();
+				
+				return updated.getIdPerson();
+			}
+			else{
+				throw new Exception("id: "+target.getIdPerson()+" not found!");
+			}
+				
+			/*Person updated = new Person();
 			updated.setIdPerson(id);
 			updated.setFirstname(target.getFirstname());
 			updated.setLastname(target.getLastname());
@@ -178,13 +196,11 @@ public class Person implements Serializable {
 			tx.begin();
 			updated = LifeCoachDao.instance.getEntityManager().merge(updated);
 			tx.commit();
-			LifeCoachDao.instance.destroyEntityManager();
+			LifeCoachDao.instance.destroyEntityManager();*/
 		}catch(Exception ex){
 			ex.printStackTrace();
-			id = new Long(-1);
+			return new Long(-1);
 		}
-		
-		return id;
 	}
 	
 	public String toString(){

@@ -133,7 +133,7 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
 
 **REQUEST 3:** updatePerson(Person p): update the personal info of the Person Passed as input
 
-PUT request is the following
+PUT request is the following:
 
 ```xml
 <soap:Envelope
@@ -143,11 +143,76 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <m:updatePerson>
       <person>
       	<personId>2</personId>
-        <firstname>Pinco</firstname>
+        <firstname>Antonio</firstname>
         <lastname>Pallino</lastname>
-        <birthdate>1979-01-01</birthdate>
+        <birthdate>1979-03-01</birthdate>
       </person>
     </m:updatePerson>
 </soap:Body>
 </soap:Envelope>
+```
+
+**Before**:
+```xml
+<person>
+	<personId>2</personId>
+	<firstname>Pinco</firstname>
+	<lastname>Pallino</lastname>
+	<birthdate>1980-01-01</birthdate>
+	<currentHealth>
+		<measure>
+			<mid>4</mid>
+			<dateRegistered>2014-02-25</dateRegistered>
+			<measureType>weight</measureType>
+			<measureValue>85.5</measureValue>
+			<measureValueType>Double</measureValueType>
+		</measure>
+		<measure>
+			<mid>5</mid>
+			<dateRegistered>2014-06-11</dateRegistered>
+			<measureType>height</measureType>
+			<measureValue>180</measureValue>
+			<measureValueType>Integer</measureValueType>
+		</measure>
+		<measure>
+			<mid>6</mid>
+			<dateRegistered>2014-09-01</dateRegistered>
+			<measureType>steps</measureType>
+			<measureValue>10000</measureValue>
+			<measureValueType>Integer</measureValueType>
+		</measure>
+	</currentHealth>
+</person>
+```
+**After**:
+```xml
+<person>
+	<personId>2</personId>
+	<firstname>Antonio</firstname>
+	<lastname>Pallino</lastname>
+	<birthdate>1979-03-01</birthdate>
+	<currentHealth>
+		<measure>
+			<mid>4</mid>
+			<dateRegistered>2014-02-25</dateRegistered>
+			<measureType>weight</measureType>
+			<measureValue>85.5</measureValue>
+			<measureValueType>Double</measureValueType>
+		</measure>
+		<measure>
+			<mid>5</mid>
+			<dateRegistered>2014-06-11</dateRegistered>
+			<measureType>height</measureType>
+			<measureValue>180</measureValue>
+			<measureValueType>Integer</measureValueType>
+		</measure>
+		<measure>
+			<mid>6</mid>
+			<dateRegistered>2014-09-01</dateRegistered>
+			<measureType>steps</measureType>
+			<measureValue>10000</measureValue>
+			<measureValueType>Integer</measureValueType>
+		</measure>
+	</currentHealth>
+</person>
 ```
