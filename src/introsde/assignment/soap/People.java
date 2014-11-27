@@ -1,5 +1,7 @@
 package introsde.assignment.soap;
 
+import java.util.Date;
+
 import introsde.assignment.model.Measure;
 import introsde.assignment.model.Person;
 import introsde.assignment.wrapper.HistoryListWrapper;
@@ -48,4 +50,8 @@ public interface People {
 	@WebMethod(operationName="readMeasureTypes")
 	@WebResult(name="measureTypes")
 	public TypesWrapper showMeasureTypes();
+	
+	@WebMethod(operationName="readPersonMeasureByDates")
+	@WebResult(name="healthProfile-history")
+	public HistoryListWrapper filterHistoryByDatesAndMeasureType(@WebParam(name="personId") Long id, @WebParam(name="measureType") String measureType, @WebParam(name="after") Date after, @WebParam(name="before") Date before);
 }

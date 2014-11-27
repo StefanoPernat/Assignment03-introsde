@@ -5,6 +5,7 @@ import introsde.assignment.converter.DateConverter;
 import introsde.assignment.dao.LifeCoachDao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.sun.org.apache.regexp.internal.recompile;
 
 @Entity
 @Table(name="\"Measure\"")
@@ -232,6 +235,35 @@ public class Measure implements Serializable {
 	
 	public static List<String> getTypes(){
 		return LifeCoachDao.instance.getEntityManager().createNamedQuery("Measure.types", String.class).getResultList();
+	}
+	
+	public static List<Measure> getFilterByDatesHistory(Long id, String measureTypes, Date after, Date before)
+	{
+		List<Measure> selectedHistory = null;
+		List<Measure> filteredHistory = null;
+		Person target = Person.getOne(id);
+		if(target != null){
+			try{
+				selectedHistory = LifeCoachDao.instance.getEntityManager().createNamedQuery("Measure.getHistoryByName", Measure.class)
+																		  .setParameter("id", id.longValue())
+																		  .setParameter("type", measureTypes).getResultList();
+				filteredHistory = new ArrayList<Measure>();
+				for(Measure m: selectedHistory){
+					System.out.println("--> "+m.toString());
+					if(m.dateRegistered.after(after) && m.dateRegistered.before(before)){
+						filteredHistory.add(m);
+					}
+					
+					
+				}
+			}catch(Exception ex){
+				ex.printStackTrace();
+				return null;
+			}
+			
+			return filteredHistory;
+		}
+		else return null;
 	}
 	
 }

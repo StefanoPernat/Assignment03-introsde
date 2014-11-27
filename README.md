@@ -312,3 +312,19 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
 </soap:Body>
 </soap:Envelope>
 ```
+
+**EXTRA 3**: return the history of **measureType** for Person **id** with date in range
+```xml
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://soap.assignment.introsde/">
+    <m:readPersonMeasureByDates>
+      <personId>1</personId>
+      <measureType>weight</measureType>
+      <after>2013-01-01</after>
+      <before>2014-01-05</before>
+    </m:readPersonMeasureByDates>
+</soap:Body>
+</soap:Envelope>
+```

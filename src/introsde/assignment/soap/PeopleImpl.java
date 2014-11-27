@@ -1,6 +1,7 @@
 package introsde.assignment.soap;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import introsde.assignment.model.Measure;
 import introsde.assignment.model.Person;
@@ -94,8 +95,7 @@ public class PeopleImpl implements People {
 
 	@Override
 	public Long addMeasure(Long id, Measure measure) {
-		// TODO Auto-generated method stub
-		System.out.println("REQUESTED: addMeasure("+id.longValue()+","+measure.toString()+")");
+		System.out.println("--> REQUESTED: addMeasure("+id.longValue()+","+measure.toString()+")");
 		Long result = Measure.addMeasure(id, measure);
 		Person resultPerson = Person.getOne(id);
 		resultPerson.refreshMeasure();
@@ -107,5 +107,22 @@ public class PeopleImpl implements People {
 		TypesWrapper measureTypesW = new TypesWrapper();
 		measureTypesW.setTypes(Measure.getTypes());
 		return measureTypesW;
+	}
+
+	@Override
+	public HistoryListWrapper filterHistoryByDatesAndMeasureType(Long id, String measureType, Date after, Date before) {
+		System.out.println("--> REQUESTED: filterHistoryByDate("+id.longValue()+","+measureType+","+after+","+before+")");
+		ArrayList<Measure> measureListed = new ArrayList<Measure>();
+		measureListed.addAll(Measure.getFilterByDatesHistory(id, measureType, after, before));
+		HistoryListWrapper historyWrapper = new HistoryListWrapper();
+		historyWrapper.setHistoryMeasure(measureListed);
+		if(historyWrapper.getHistoryMeasure().size() > 0){
+			System.out.println("--> Found some measure");
+		}
+		else{
+			System.out.println("--> No measure...");
+		}
+		return historyWrapper;
+		
 	}
 }
