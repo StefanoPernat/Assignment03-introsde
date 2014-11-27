@@ -2,6 +2,7 @@ package introsde.assignment.soap;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import introsde.assignment.model.Measure;
 import introsde.assignment.model.Person;
@@ -124,5 +125,17 @@ public class PeopleImpl implements People {
 		}
 		return historyWrapper;
 		
+	}
+
+	@Override
+	public PeopleListWrapper filterPeopleListByMeasure(String measureType, Long max, Long min) {
+		System.out.println("--> REQUESTED: filterPeopleListByMeasure("+measureType+","+max+","+min+")");
+		List<Person> result = new ArrayList<Person>();
+		for(Long id: Measure.getFilteredIdByMeasure(measureType, min, max)){
+			result.add(Person.getOne(id));
+		}
+		PeopleListWrapper resultW = new PeopleListWrapper();
+		resultW.setPeopleList(result);
+		return resultW;
 	}
 }

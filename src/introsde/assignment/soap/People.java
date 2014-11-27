@@ -54,4 +54,8 @@ public interface People {
 	@WebMethod(operationName="readPersonMeasureByDates")
 	@WebResult(name="healthProfile-history")
 	public HistoryListWrapper filterHistoryByDatesAndMeasureType(@WebParam(name="personId") Long id, @WebParam(name="measureType") String measureType, @WebParam(name="after") Date after, @WebParam(name="before") Date before);
+	
+	@WebMethod(operationName="readPersonListByMeasurement")
+	@WebResult(name="people")
+	public PeopleListWrapper filterPeopleListByMeasure(@WebParam(name="measureType") String measureType, @WebParam(name="maxValue") Long max, @WebParam(name="minValue") Long min);
 }

@@ -314,6 +314,8 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
 ```
 
 **EXTRA 3**: return the history of **measureType** for Person **id** with date in range
+
+POST request is the following
 ```xml
 <soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
@@ -328,3 +330,21 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
 </soap:Body>
 </soap:Envelope>
 ```
+
+**EXTRA 4**: readPersonListByMeasurement(String measureType, String maxValue, String minValue): list people whose measureType is in range
+
+POST request is the following:
+```xml
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://soap.assignment.introsde/">
+    <m:readPersonListByMeasurement>
+      <measureType>weight</measureType>
+      <minValue>72</minValue>
+      <maxValue>82</maxValue>
+    </m:readPersonListByMeasurement>
+</soap:Body>
+</soap:Envelope>
+```
+ 

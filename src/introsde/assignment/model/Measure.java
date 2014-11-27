@@ -28,8 +28,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.sun.org.apache.regexp.internal.recompile;
-
 @Entity
 @Table(name="\"Measure\"")
 @NamedQueries({
@@ -38,7 +36,8 @@ import com.sun.org.apache.regexp.internal.recompile;
 	@NamedQuery(name="Measure.getHistoryByName", query="SELECT m FROM Measure m WHERE m.person.idPerson=:id AND m.measureType=:type AND m.isCurrent=0"),
 	@NamedQuery(name="Measure.getSelectedHistoryMeasure", query="SELECT m FROM Measure m WHERE m.person.idPerson=:id AND m.measureType=:type AND m.idMeasure=:mid AND m.isCurrent=0"),
 	@NamedQuery(name="Measure.get", query="SELECT m FROM Measure m WHERE m.person.idPerson=:id AND m.measureType=:type AND m.isCurrent=1"),
-	@NamedQuery(name="Measure.types", query="SELECT distinct(m.measureType) FROM Measure m")
+	@NamedQuery(name="Measure.types", query="SELECT distinct(m.measureType) FROM Measure m"),
+	@NamedQuery(name="Measure.isCurrentInRange", query="SELECT m.person.idPerson FROM Measure m WHERE m.isCurrent=1 AND m.measureType=:type AND m.measureValue>=:min AND m.measureValue <=:max")
 })
 @XmlRootElement(name="measure")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -256,6 +255,7 @@ public class Measure implements Serializable {
 					
 					
 				}
+				LifeCoachDao.instance.destroyEntityManager();
 			}catch(Exception ex){
 				ex.printStackTrace();
 				return null;
@@ -264,6 +264,21 @@ public class Measure implements Serializable {
 			return filteredHistory;
 		}
 		else return null;
+	}
+	
+	public static List<Long> getFilteredIdByMeasure(String measureType, Long min, Long max){
+		List<Long> result = null;
+		
+		try{
+			result = LifeCoachDao.instance.getEntityManager().createNamedQuery("Measure.isCurrentInRange", Long.class)
+															 .setParameter("type", measureType)
+															 .setParameter("min", ""+min.longValue())
+															 .setParameter("max", ""+max.longValue()).getResultList();
+			return result;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			return new ArrayList<Long>();
+		}
 	}
 	
 }
