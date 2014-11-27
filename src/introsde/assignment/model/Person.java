@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 	@NamedQuery(name="Person.getOne", query="SELECT p FROM Person p WHERE p.idPerson=:id"),
 	@NamedQuery(name="Person.getIdFromFullName", 
 				query="SELECT p.idPerson FROM Person p WHERE p.firstname=:fname AND p.lastname=:lname"),
-	@NamedQuery(name="Person.maxId", query="SELECT max(p.idPerson) FROM Person p")
+	@NamedQuery(name="Person.maxId", query="SELECT max(p.idPerson) FROM Person p"),
+	@NamedQuery(name="Person.refreshMeasure", query="SELECT m FROM Measure m WHERE m.person.idPerson=:id")
 })
 @XmlRootElement(name="person")
 @XmlAccessorType(XmlAccessType.NONE)
@@ -140,6 +141,21 @@ public class Person implements Serializable {
 		this.healthHistory = healthHistory;
 	}
 
+	public void refreshMeasure()
+	{
+		try{
+			List<Measure> refreshed = LifeCoachDao.instance.getEntityManager().createNamedQuery("Person.refreshMeasure", Measure.class)
+					  														  .setParameter("id", idPerson.longValue()).getResultList();
+			this.currentHealth = new ArrayList<Measure>();
+			this.currentHealth.addAll(refreshed);
+			
+			this.healthHistory = new ArrayList<Measure>();
+			this.healthHistory.addAll(refreshed);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	
 	public static List<Person> getAll(){
 		List<Person> res = null;
 		try{

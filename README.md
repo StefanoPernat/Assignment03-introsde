@@ -246,3 +246,69 @@ The created Person is:
 	<currentHealth />
 </person>
 ```
+
+**REQUEST 6**: readPersonHistory(Long id, String measureType): return the history of a **measureType** for person identified by **id**
+
+POST request is the following:
+```xml
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://soap.assignment.introsde/">
+    <m:readPersonHistory>
+      <personId>1</personId>
+      <measureType>weight</measureType>
+    </m:readPersonHistory>
+</soap:Body>
+</soap:Envelope>
+```
+
+**REQUEST 7**: readPersonMeasurement(Long id, String measureType, Long mid): return the selected measure of history
+```xml
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://soap.assignment.introsde/">
+    <m:readPersonMeasurement>
+      <personId>1</personId>
+      <measureType>weight</measureType>
+      <mid>13</mid>
+    </m:readPersonMeasurement>
+</soap:Body>
+</soap:Envelope>
+```
+
+**REQUEST 8**: savePersonMeasurement(Long id, Measure m): save a new **Measure** for Person identified by **id**
+
+POST request is the following:
+```xml
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://soap.assignment.introsde/">
+    <m:savePersonMeasurement>
+      <personId>5</personId>
+      <measure>
+        <mid>0</mid>
+        <dateRegistered>2014-11-27</dateRegistered>
+        <measureType>weight</measureType>
+        <measureValue>80</measureValue>
+        <measureValueType>Double</measureValueType>
+      </measure>
+    </m:savePersonMeasurement>
+</soap:Body>
+</soap:Envelope>
+```
+
+**REQUEST 9**: readMeasureTypes(): return all the **measure types**
+
+POST request is the following:
+```xml
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://soap.assignment.introsde/">
+    <m:readMeasureTypes />
+</soap:Body>
+</soap:Envelope>
+```

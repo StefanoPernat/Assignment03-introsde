@@ -1,6 +1,5 @@
 package introsde.assignment.wrapper;
 
-import introsde.assignment.model.Measure;
 import introsde.assignment.model.Person;
 
 import java.util.ArrayList;
