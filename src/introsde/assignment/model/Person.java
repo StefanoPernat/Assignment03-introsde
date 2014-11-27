@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 	@NamedQuery(name="Person.maxId", query="SELECT max(p.idPerson) FROM Person p"),
 	@NamedQuery(name="Person.refreshMeasure", query="SELECT m FROM Measure m WHERE m.person.idPerson=:id")
 })
-@XmlRootElement(name="person")
+//@XmlRootElement(name="person")
 @XmlAccessorType(XmlAccessType.NONE)
 public class Person implements Serializable {
 	private static final long serialVersionUID = 1573094360811963821L;
@@ -90,11 +90,16 @@ public class Person implements Serializable {
 	@XmlElement(name="measure")
 	public List<Measure> getCurrentHealth() {
 		ArrayList<Measure> currentValueInCurrentHealth = new ArrayList<Measure>();
+		this.currentHealth = new ArrayList<Measure>();
+		this.currentHealth.clear();
+		this.currentHealth.addAll(LifeCoachDao.instance.getAllMeasures(idPerson));
 		currentValueInCurrentHealth.addAll(this.currentHealth);
 		this.currentHealth.clear();
 		for(Measure m: currentValueInCurrentHealth){
 			if(m.IsCurrent() == 1){
+				m.setPerson(this);
 				this.currentHealth.add(m);
+				
 			}
 		}
 		return this.currentHealth;
@@ -104,9 +109,23 @@ public class Person implements Serializable {
 	}
 
 	public List<Measure> getHealthHistory() {
+		ArrayList<Measure> currentValueInHistoryHealth = new ArrayList<Measure>();
 		this.healthHistory.clear();
-		this.healthHistory.addAll(LifeCoachDao.instance.getHistoryHealthMeasures(this.idPerson.intValue()));
+		this.healthHistory.addAll(LifeCoachDao.instance.getAllMeasures(idPerson));
+		currentValueInHistoryHealth.addAll(this.healthHistory);
+		this.healthHistory.clear();
+		for(Measure m: currentValueInHistoryHealth){
+			if(m.IsCurrent() == 0){
+				m.setPerson(this);
+				this.healthHistory.add(m);
+				
+			}
+		}
 		return this.healthHistory;
+				
+		/*this.healthHistory.clear();
+		this.healthHistory.addAll(LifeCoachDao.instance.getHistoryHealthMeasures(this.idPerson.intValue()));
+		return this.healthHistory;*/
 	}
 
 	
@@ -187,7 +206,7 @@ public class Person implements Serializable {
 		return res;
 	}
 	
-	public static Long updatePerson(Person target)
+	public static Person updatePerson(Person target)
 	{
 		Person fromDB = null;
 		
@@ -207,7 +226,7 @@ public class Person implements Serializable {
 				tx.commit();
 				LifeCoachDao.instance.destroyEntityManager();
 				
-				return updated.getIdPerson();
+				return updated;
 			}
 			else{
 				throw new Exception("id: "+target.getIdPerson()+" not found!");
@@ -226,7 +245,7 @@ public class Person implements Serializable {
 			LifeCoachDao.instance.destroyEntityManager();*/
 		}catch(Exception ex){
 			ex.printStackTrace();
-			return new Long(-1);
+			return new Person();
 		}
 	}
 	
@@ -243,14 +262,14 @@ public class Person implements Serializable {
 		}
 	}
 	
-	public static Long createPerson(Person p){
+	public static Person createPerson(Person p){
 		EntityTransaction tx = LifeCoachDao.instance.getEntityManager().getTransaction();
 		tx.begin();
 		LifeCoachDao.instance.getEntityManager().persist(p);
 		tx.commit();
 		LifeCoachDao.instance.destroyEntityManager();
 		
-		return Person.getMaxId();
+		return Person.getOne(Person.getMaxId());
 	}
 	
 	public boolean hasCurrentHealth()

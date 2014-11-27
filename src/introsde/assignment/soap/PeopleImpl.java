@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import introsde.assignment.dao.LifeCoachDao;
 import introsde.assignment.model.Measure;
 import introsde.assignment.model.Person;
 import introsde.assignment.wrapper.HistoryListWrapper;
@@ -11,6 +12,7 @@ import introsde.assignment.wrapper.PeopleListWrapper;
 import introsde.assignment.wrapper.TypesWrapper;
 
 import javax.jws.WebService;
+import javax.persistence.EntityTransaction;
 
 @WebService(endpointInterface="introsde.assignment.soap.People", serviceName="PeopleImplService")
 public class PeopleImpl implements People {
@@ -46,14 +48,14 @@ public class PeopleImpl implements People {
 	}
 
 	@Override
-	public Long updatePerson(Person target) {
+	public Person updatePerson(Person target) {
 		System.out.println("--> REQUESTED: updatePerson(p)");
 		System.out.println("--> "+target.toString());
 		return Person.updatePerson(target);
 	}
 
 	@Override
-	public Long createPerson(Person target) {
+	public Person createPerson(Person target) {
 		System.out.println("--> REQUESTED: createPerson("+target.toString()+")");
 		System.out.println("--> "+target.toString());
 		System.out.println(target.hasCurrentHealth());
@@ -137,5 +139,28 @@ public class PeopleImpl implements People {
 		PeopleListWrapper resultW = new PeopleListWrapper();
 		resultW.setPeopleList(result);
 		return resultW;
+	}
+
+	@Override
+	public String deletePerson(Long id) {
+		System.out.println("REQUESTED: deletePerson("+id.longValue()+")");
+		String result = "";
+		Person target = Person.getOne(id);
+		if(target != null)
+		{
+			EntityTransaction tx = LifeCoachDao.instance.getEntityManager().getTransaction();
+			tx.begin();
+			target = LifeCoachDao.instance.getEntityManager().merge(target);
+			LifeCoachDao.instance.getEntityManager().remove(target);
+			tx.commit();
+			result = "Person with id:"+id.longValue()+" deleted";
+			return result;
+			
+		}
+		else{
+			result = "Person with id: "+id.longValue()+" not found!";
+			return result;
+		}
+			
 	}
 }

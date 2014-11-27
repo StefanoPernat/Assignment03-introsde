@@ -55,4 +55,11 @@ public enum LifeCoachDao {
 		return res;
 	}
 	
+	public List<Measure> getAllMeasures(Long personId){
+		List<Measure> allM = LifeCoachDao.instance.getEntityManager().createNamedQuery("Measure.getAll", Measure.class)
+													   				 .setParameter("id", personId.longValue()).getResultList();
+		destroyEntityManager();
+		return allM;
+	}
+	
 }

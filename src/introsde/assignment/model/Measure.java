@@ -37,9 +37,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 	@NamedQuery(name="Measure.getSelectedHistoryMeasure", query="SELECT m FROM Measure m WHERE m.person.idPerson=:id AND m.measureType=:type AND m.idMeasure=:mid AND m.isCurrent=0"),
 	@NamedQuery(name="Measure.get", query="SELECT m FROM Measure m WHERE m.person.idPerson=:id AND m.measureType=:type AND m.isCurrent=1"),
 	@NamedQuery(name="Measure.types", query="SELECT distinct(m.measureType) FROM Measure m"),
-	@NamedQuery(name="Measure.isCurrentInRange", query="SELECT m.person.idPerson FROM Measure m WHERE m.isCurrent=1 AND m.measureType=:type AND m.measureValue>=:min AND m.measureValue <=:max")
+	@NamedQuery(name="Measure.isCurrentInRange", query="SELECT m.person.idPerson FROM Measure m WHERE m.isCurrent=1 AND m.measureType=:type AND m.measureValue>=:min AND m.measureValue <=:max"),
+	@NamedQuery(name="Measure.getAll", query="SELECT m FROM Measure m WHERE m.person.idPerson=:id")
 })
-@XmlRootElement(name="measure")
+//@XmlRootElement(name="measure")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Measure implements Serializable {
 	
@@ -200,12 +201,25 @@ public class Measure implements Serializable {
 				measure.setCurrent(0);
 				measure.setPerson(target);
 				
+				Measure newMeasure = new Measure();
+				newMeasure.setCurrent(1);
+				newMeasure.setDateRegistered(m.getDateRegistered());
+				newMeasure.setIdMeasure(m.getIdMeasure());
+				newMeasure.setMeasureType(m.getMeasureType());
+				newMeasure.setMeasureValue(m.getMeasureValue());
+				newMeasure.setPerson(target);
+				newMeasure.setValueType(m.getValueType());
+				
+				
 				EntityTransaction tx = LifeCoachDao.instance.getEntityManager().getTransaction();
 				tx.begin();
 				LifeCoachDao.instance.getEntityManager().persist(measure);
+				LifeCoachDao.instance.getEntityManager().persist(newMeasure);
 				tx.commit();
 				
 				System.out.println("--> measure added");
+				LifeCoachDao.instance.destroyEntityManager();
+				return newMeasure.getIdMeasure();
 			}
 			else{
 				measure = new Measure();
@@ -225,9 +239,10 @@ public class Measure implements Serializable {
 				tx.commit();
 				
 				System.out.println("--> measure added...");
+				LifeCoachDao.instance.destroyEntityManager();
+				return measure.getIdMeasure();
 			}
-			LifeCoachDao.instance.destroyEntityManager();
-			return measure.getIdMeasure();
+			
 		}
 		else return new Long(-1);
 	}

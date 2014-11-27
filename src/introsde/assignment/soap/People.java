@@ -28,12 +28,12 @@ public interface People {
 	public Person getPerson(@WebParam(name="personId") Long id);
 	
 	@WebMethod(operationName="updatePerson")
-	@WebResult(name="personId")
-	public Long updatePerson(@WebParam(name="person") Person target);
+	@WebResult(name="person")
+	public Person updatePerson(@WebParam(name="person") Person target);
 	
 	@WebMethod(operationName="createPerson")
-	@WebResult(name="personId")
-	public Long createPerson(@WebParam(name="person") Person target);
+	@WebResult(name="person")
+	public Person createPerson(@WebParam(name="person") Person target);
 	
 	@WebMethod(operationName="readPersonHistory")
 	@WebResult(name="healthProfile-history")
@@ -58,4 +58,8 @@ public interface People {
 	@WebMethod(operationName="readPersonListByMeasurement")
 	@WebResult(name="people")
 	public PeopleListWrapper filterPeopleListByMeasure(@WebParam(name="measureType") String measureType, @WebParam(name="maxValue") Long max, @WebParam(name="minValue") Long min);
+
+	@WebMethod(operationName="deletePerson")
+	@WebResult(name="message")
+	public String deletePerson(@WebParam(name="personId") Long id);
 }
